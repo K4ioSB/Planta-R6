@@ -118,14 +118,14 @@
     <li><img src="Mapas/r6-maps-bank-blueprint-2.jpg" alt="Imagem 2"></li>
     <li><img src="Mapas/r6-maps-bank-blueprint-3.jpg" alt="Imagem 2"></li>
     <li><img src="Mapas/r6-maps-bank-blueprint-4.jpg" alt="Imagem 2"></li>
-    <!-- Adicione mais imagens conforme necessário -->
+
 </ul>
 <div id="canvas-container">
     <canvas id="canvas"></canvas>
 </div>
 
 
-    <!-- O canvas onde desenharemos e moveremos os ícones -->
+    
    
     <script>
         var canvas = document.getElementById('canvas');
@@ -136,22 +136,22 @@
         var clearButton = document.getElementById('clear');
         var operatorButtons = document.querySelectorAll('.operator-button');
 
-        var icons = []; // Array para armazenar os ícones
-        var selectedIcon = null; // Variável para armazenar o ícone selecionado
+        var icons = [];
+        var selectedIcon = null; 
         var isDragging = false;
         var offsetX = 0;
         var offsetY = 0;
         var drawingColor = colorPicker.value;
         var drawingThickness = thicknessInput.value;
 
-        // Função para desenhar os ícones
+   
         function drawIcons() {
             icons.forEach(function(icon) {
                 ctx.drawImage(icon.image, icon.x, icon.y, icon.size, icon.size);
             });
         }
 
-        // Função para adicionar um novo ícone
+     
         function addIcon(x, y, size, imageSrc) {
             var icon = new Image();
             icon.src = imageSrc;
@@ -161,34 +161,34 @@
             };
         }
 
-        // Função para redesenhar o canvas
+   
         function redrawCanvas() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawIcons();
         }
 
-        // Atualizar cor de desenho
+  
         colorPicker.addEventListener('change', function() {
             drawingColor = colorPicker.value;
         });
 
-        // Atualizar espessura de desenho
+
         thicknessInput.addEventListener('change', function() {
             drawingThickness = thicknessInput.value;
         });
-
-        // Ativar modo borracha
+    
+        
         eraseButton.addEventListener('click', function() {
-            drawingColor = '#FFFFFF'; // Cor branca para simular borracha
+            drawingColor = '#FFFFFF'; 
         });
 
-        // Limpar o canvas
+      
         clearButton.addEventListener('click', function() {
-            icons = []; // Limpar todos os ícones
+            icons = []; 
             redrawCanvas();
         });
 
-        // Adicionar ícones ao clicar nos botões dos operadores
+       
         operatorButtons.forEach(function(button) {
             button.addEventListener('click', function() {
                 var imageSrc = this.getAttribute('data-image');
@@ -196,12 +196,12 @@
             });
         });
 
-        // Evento de clique do mouse
+   
         canvas.addEventListener('mousedown', function(e) {
             var mouseX = e.offsetX;
             var mouseY = e.offsetY;
 
-            // Verificar se um ícone foi clicado
+  
             for (var i = icons.length - 1; i >= 0; i--) {
                 var icon = icons[i];
                 var x = icon.x;
@@ -218,13 +218,13 @@
                 }
             }
 
-            // Desenhar se nenhum ícone foi clicado
+         
             isDrawing = true;
             lastX = mouseX;
             lastY = mouseY;
         });
 
-        // Evento de movimento do mouse
+ 
         canvas.addEventListener('mousemove', function(e) {
             var mouseX = e.offsetX;
             var mouseY = e.offsetY;
@@ -247,7 +247,7 @@
             }
         });
 
-        // Evento de soltar o botão do mouse
+     
         canvas.addEventListener('mouseup', function() {
             isDragging = false;
             selectedIcon = null;
@@ -259,13 +259,37 @@
 
             var imageList = document.getElementById('image-list');
 
-            // Carrega a imagem inicial
+
             loadImage(imageList.querySelector('img').src);
 
-            // Adiciona o evento de clique em cada imagem da lista
+      
             imageList.addEventListener('click', function(event) {
                 if (event.target.tagName === 'IMG') {
                     loadImage(event.target.src);
+                }
+            });
+            window.onload = function() {
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            var mapList = document.getElementById('map-list');
+
+            // Carrega as imagens do primeiro mapa por padrão
+            loadImage(mapList.querySelector('li.selected').querySelector('img').src);
+
+            // Adiciona o evento de clique em cada mapa da lista
+            mapList.addEventListener('click', function(event) {
+                if (event.target.tagName === 'IMG') {
+                    var mapImages = event.target.parentNode.querySelectorAll('img');
+                    for (var i = 0; i < mapImages.length; i++) {
+                        loadImage(mapImages[i].src);
+                    }
+                    // Remove a classe 'selected' de todos os itens da lista
+                    var listItems = mapList.querySelectorAll('li');
+                    for (var j = 0; j < listItems.length; j++) {
+                        listItems[j].classList.remove('selected');
+                    }
+                    // Adiciona a classe 'selected' ao item de lista clicado
+                    event.target.parentNode.classList.add('selected');
                 }
             });
 
@@ -279,6 +303,21 @@
                 };
                 img.src = src;
             }
+
+            // Adicionar um ícone ao clicar no canvas
+            canvas.addEventListener('click', function(event) {
+                var iconSize = 50; // Tamanho do ícone
+                var icon = new Image();
+                icon.src = 'caminho/do/seu/icone.png'; // URL do ícone
+                var x = event.offsetX - iconSize / 2;
+                var y = event.offsetY - iconSize / 2;
+                icon.onload = function() {
+                    ctx.drawImage(icon, x, y, iconSize, iconSize);
+                };
+            });
+        };
+ 
+    
         };
     </script>
     
