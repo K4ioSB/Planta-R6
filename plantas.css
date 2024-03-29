@@ -1,0 +1,97 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body {
+    background: #811628;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+}
+
+.icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10px
+    ;
+}
+.icons-atq,.icons-def{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.icons-atq button,
+.icons-def button {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border: none;
+    background-size: cover;
+    background-color: transparent;
+    background-repeat: no-repeat;
+}
+
+#canvas-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#canvas {
+    border: 1px solid #000;
+    cursor: crosshair;
+    display: block;
+    background-size: cover;
+    background-position: center;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+li {
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+li img {
+    width: 100px;
+    height: auto;
+    border: 2px solid transparent;
+}
+
+li img:hover {
+    border-color: #333;
+}
+
+.controls {
+    border: 1px solid black;
+    margin: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls div {
+    margin: 10px;
+}
+
+.controls > * {
+    background-color: white;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
