@@ -81,6 +81,7 @@ body {
 }
 .mensagemMobile {
     display: flex;
+    margin: 10px;
     font-size: 15px;
     flex-direction: column;
     align-items: center;
@@ -164,7 +165,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    margin: 10px;
+
 }
 
 
@@ -273,4 +274,21 @@ li {
 
     }
     
+}@media screen and (max-width: 490px) {
+    .iconsMobile {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+       
+        background-color: #0d2f3f;
+        box-shadow: 0 0 5px #000;
+    }
+    .opcoesMapas {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+    }
 }
