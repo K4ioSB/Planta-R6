@@ -148,6 +148,9 @@ body {
     flex-direction: row;
 
 }
+.iconsMobile{
+    display: none;
+}
 .conteinerMapas button:hover {
     background-color: #0d2f3f;
     color: white;
