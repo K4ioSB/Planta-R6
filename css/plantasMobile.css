@@ -280,7 +280,7 @@ li {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-       
+        width: 100%;
         background-color: #0d2f3f;
         box-shadow: 0 0 5px #000;
     }
@@ -291,4 +291,15 @@ li {
         flex-direction: column;
 
     }
+.icons-atq,
+.icons-def {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.icon {
+    width: 20px;
+    height: 20px;
+
+}
 }
