@@ -81,7 +81,6 @@ body {
 }
 .mensagemMobile {
     display: flex;
-    margin: 20px;
     font-size: 15px;
     flex-direction: column;
     align-items: center;
@@ -260,7 +259,6 @@ li {
     }
     .mensagemMobile {
         display: flex;
-        margin: 20px;
         font-size: 10px;
         flex-direction: column;
         align-items: center;
