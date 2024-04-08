@@ -82,6 +82,7 @@ body {
 .mensagemMobile {
     display: flex;
     margin: 20px;
+    font-size: 15px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -130,7 +131,6 @@ body {
 }
 
 .conteinerMapas {
-    margin: 10px;
     display: none;
     justify-content: end;
     flex-direction: row;
@@ -233,7 +233,7 @@ li {
     transition: 0.8s;
 }
 
-@media screen and (max-width: 825px) {
+@media screen and (max-width: 965px) {
     .iconsMobile {
         display: flex;
         flex-direction: column;
@@ -258,4 +258,21 @@ li {
         font-size: 8px;
         transition: 0.8s;
     }
+    .mensagemMobile {
+        display: flex;
+        margin: 20px;
+        font-size: 10px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #c3c3c3;
+    }
+    .opcoesMapas {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+
+    }
+    
 }
