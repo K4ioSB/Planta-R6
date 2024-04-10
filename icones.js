@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let imageLoaded = false;
 
     const image = new Image();
-    image.src = 'Fundo/download.jpg'; 
+    image.src = './Fundo/download.jpg'; 
     image.onload = function() {
         canvas.width = this.width;
         canvas.height = this.height;
