@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let imageLoaded = false;
 
     const image = new Image();
-    image.src = 'Fundo/download.jpg'; // Substitua 'image.jpg' pelo caminho da sua imagem
+    image.src = 'Fundo/download.jpg'; 
     image.onload = function() {
         canvas.width = this.width;
         canvas.height = this.height;
@@ -17,10 +17,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     icons.forEach(icon => {
         icon.addEventListener('dragstart', function (e) {
-            e.dataTransfer.setDragImage(this, 25, 25); // Define a imagem arrastada como a própria imagem
+            e.dataTransfer.setDragImage(this, 25, 25);
             offsetX = e.offsetX;
             offsetY = e.offsetY;
-            e.dataTransfer.setData('text/plain', icon.getAttribute('data-src')); // Define a URL da imagem arrastada
+            e.dataTransfer.setData('text/plain', icon.getAttribute('data-src')); 
         });
     });
 
@@ -33,11 +33,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!imageLoaded) return;
         const x = e.clientX - canvas.getBoundingClientRect().left - offsetX;
         const y = e.clientY - canvas.getBoundingClientRect().top - offsetY;
-        const iconSrc = e.dataTransfer.getData('text/plain'); // Obtém a URL da imagem arrastada
+        const iconSrc = e.dataTransfer.getData('text/plain'); 
         const iconImg = new Image();
         iconImg.src = iconSrc;
         iconImg.onload = function() {
-            ctx.drawImage(iconImg, x, y, 50, 50); // Desenha a imagem arrastada no canvas
+            ctx.drawImage(iconImg, x, y, 50, 50); 
         };
     });
 });
