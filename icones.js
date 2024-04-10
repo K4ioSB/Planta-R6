@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let imageLoaded = false;
 
     const image = new Image();
-    image.src = 'Fundo/download.png'; // Substitua 'image.jpg' pelo caminho da sua imagem
+    image.src = 'Fundo/download.jpg'; // Substitua 'image.jpg' pelo caminho da sua imagem
     image.onload = function() {
         canvas.width = this.width;
         canvas.height = this.height;
