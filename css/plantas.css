@@ -80,16 +80,10 @@ body {
 }
 
 .icons-atq,
-.icons-def{
+.icons-def,.icons-gadgets{
     width: 50px;
     height: 50px;
-    cursor: pointer;
-}
-
-.icons-gadgets{
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
+    cursor: grab;
 }
 
 #canvas {
