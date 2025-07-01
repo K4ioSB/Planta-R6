@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         icon.addEventListener('dragstart', function (e) {
-            e.dataTransfer.setDragImage(this, 25, 25);
+            e.dataTransfer.setDragImage(this, 20, 20);
             offsetX = e.offsetX;
             offsetY = e.offsetY;
            
@@ -68,14 +68,14 @@ document.addEventListener('DOMContentLoaded', function () {
         iconImg.src = iconSrc;
         iconImg.onload = function() {
             ctx.save();
-            ctx.translate(x + 25, y + 25); 
+            ctx.translate(x + 20, y + 20); 
 
           
             if (document.getElementById(iconId).closest('.gadgets')) {
                 ctx.rotate((iconRotation * Math.PI) / 180);
             }
 
-            ctx.drawImage(iconImg, -25, -25, 50, 50); 
+            ctx.drawImage(iconImg, -20, -20, 40, 40); 
             ctx.restore();
         };
     });
