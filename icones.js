@@ -3,9 +3,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
-    let offsetX, offsetY;
     let imageLoaded = false;
     let rotationAngle = {}; 
+    const iconSizeInput = document.getElementById('icon-size');
+    const iconSizeValue = document.getElementById('icon-size-value');
+
+    iconSizeInput.addEventListener('input', function () {
+        iconSizeValue.textContent = `${iconSizeInput.value} px`;
+    });
 
     const image = new Image();
     image.src = './Fundo/download.jpg'; 
@@ -14,6 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
         canvas.height = this.height;
         ctx.drawImage(this, 0, 0);
         imageLoaded = true;
+        if (typeof window.saveCanvasSnapshot === 'function') {
+            window.saveCanvasSnapshot();
+        }
     };
 
     icons.forEach(icon => {
@@ -39,10 +47,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         icon.addEventListener('dragstart', function (e) {
-            e.dataTransfer.setDragImage(this, 20, 20);
-            offsetX = e.offsetX;
-            offsetY = e.offsetY;
-           
+            const size = Number(iconSizeInput.value);
+            e.dataTransfer.setDragImage(this, size / 2, size / 2);
             e.dataTransfer.setData('text/plain', JSON.stringify({ src: icon.getAttribute('data-src'), id: iconId }));
         });
     });
@@ -55,8 +61,14 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         if (!imageLoaded) return;
 
-        const x = e.clientX - canvas.getBoundingClientRect().left - offsetX;
-        const y = e.clientY - canvas.getBoundingClientRect().top - offsetY;
+        if (typeof window.saveCanvasSnapshot === 'function') {
+            window.saveCanvasSnapshot();
+        }
+
+        const rect = canvas.getBoundingClientRect();
+        const size = Number(iconSizeInput.value);
+        const x = (e.clientX - rect.left) * (canvas.width / rect.width) - (size / 2);
+        const y = (e.clientY - rect.top) * (canvas.height / rect.height) - (size / 2);
         
        
         const data = JSON.parse(e.dataTransfer.getData('text/plain'));
@@ -68,14 +80,14 @@ document.addEventListener('DOMContentLoaded', function () {
         iconImg.src = iconSrc;
         iconImg.onload = function() {
             ctx.save();
-            ctx.translate(x + 20, y + 20); 
+            ctx.translate(x + (size / 2), y + (size / 2));
 
           
             if (document.getElementById(iconId).closest('.gadgets')) {
                 ctx.rotate((iconRotation * Math.PI) / 180);
             }
 
-            ctx.drawImage(iconImg, -20, -20, 40, 40); 
+            ctx.drawImage(iconImg, -(size / 2), -(size / 2), size, size);
             ctx.restore();
         };
     });

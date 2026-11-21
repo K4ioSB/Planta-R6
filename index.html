@@ -98,6 +98,8 @@
                                 class="icons-def" src="Operadores/High-resolution PNG/sentry.png" alt=""></div>
                         <div class="icon" data-src="Operadores/High-resolution PNG/skopos.png" id="skopos"><img
                                 class="icons-def" src="Operadores/High-resolution PNG/skopos.png" alt=""></div>
+                        <div class="icon" data-src="Operadores/High-resolution PNG/denari.png" id="denari"><img
+                                class="icons-def" src="Operadores/High-resolution PNG/denari.png" alt=""></div>
                     </div>
                 </div>
                 <div class="controls">
@@ -108,7 +110,13 @@
                         <label for="thickness">Espessura:</label>
                         <input type="range" id="thickness" min="1" max="10" value="2">
                     </div>
+                    <div>
+                        <label for="icon-size">Tamanho do ícone:</label>
+                        <input type="range" id="icon-size" min="20" max="100" value="40">
+                        <span id="icon-size-value">40 px</span>
+                    </div>
                     <button id="erase" style="display: none;">Borracha</button>
+                    <button id="undo">Retroceder</button>
                     <button id="clear">Limpar</button>
                     
 
@@ -251,7 +259,6 @@
             </div>
         </nav>
     </header>
-    <div style="margin: 150px;"></div>
 <section class="plantas">
     <div class="conteinerMapas">
         <span class="opcoesMapas">
@@ -392,7 +399,7 @@
    
     <canvas id="canvas" width="1600" height="900"></canvas>
 
-    <footer style="margin: 10px; padding: 10px;">
+    <footer style="display: none;">
         <div style="padding: 10px;">
                 <div><P style="color: white;">Criado Por K4ioSB, O IGL em colaboração com Leigos.</P></div>
         </div>
