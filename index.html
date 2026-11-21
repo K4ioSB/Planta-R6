@@ -103,21 +103,27 @@
                     </div>
                 </div>
                 <div class="controls">
-                    <div>
-                        <input type="color" id="color" value="#000000">
+                    <div class="controls-block controls-sliders">
+                        <div class="control-row">
+                            <label for="color">Cor:</label>
+                            <input type="color" id="color" value="#000000">
+                        </div>
+                        <div class="control-row">
+                            <label for="thickness">Espessura:</label>
+                            <input type="range" id="thickness" min="1" max="10" value="2">
+                        </div>
+                        <div class="control-row">
+                            <label for="icon-size">Tamanho do ícone:</label>
+                            <input type="range" id="icon-size" min="20" max="100" value="40">
+                            <span id="icon-size-value">40 px</span>
+                        </div>
                     </div>
-                    <div>
-                        <label for="thickness">Espessura:</label>
-                        <input type="range" id="thickness" min="1" max="10" value="2">
+                    <div class="controls-block controls-actions">
+                        <button id="erase" style="display: none;">Borracha</button>
+                        <button id="undo">Retroceder</button>
+                        <button id="clear">Limpar</button>
+                        <button id="download">Baixar imagem</button>
                     </div>
-                    <div>
-                        <label for="icon-size">Tamanho do ícone:</label>
-                        <input type="range" id="icon-size" min="20" max="100" value="40">
-                        <span id="icon-size-value">40 px</span>
-                    </div>
-                    <button id="erase" style="display: none;">Borracha</button>
-                    <button id="undo">Retroceder</button>
-                    <button id="clear">Limpar</button>
                     
 
 

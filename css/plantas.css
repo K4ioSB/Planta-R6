@@ -66,6 +66,26 @@ body {
     background-color: #0d2f3f;
     box-shadow: 0 0 5px #000;
 }
+
+.barra > nav > .icons:first-child {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px minmax(0, 1fr);
+    align-items: center;
+}
+
+.barra > nav > .icons:first-child > .def,
+.barra > nav > .icons:first-child > .atq {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.barra > nav > .icons:first-child > .def {
+    justify-self: start;
+}
+
+.barra > nav > .icons:first-child > .atq {
+    justify-self: end;
+}
 .plantas{
    width: 100%;
    height: calc(100vh - 200px);
@@ -115,38 +135,71 @@ body {
 
 .controls {
     margin: 4px;
+    position: relative;
+    left: auto;
+    transform: none;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    justify-self: center;
+    align-self: center;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    z-index: 100;
     background: rgba(255, 255, 255, 0.96);
     border: 1px solid rgba(255, 255, 255, 0.9);
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-    padding: 6px 8px;
+    padding: 4px 6px;
 }
 
-.controls div {
-    margin: 3px;
-    text-align: center;
+.controls-block {
+    display: flex;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+}
+
+.controls-sliders {
+    flex-direction: column;
+    gap: 2px;
+    padding: 3px 5px;
+}
+
+.controls-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 3px;
+    padding: 3px;
+}
+
+.controls .control-row {
+    margin: 0;
+    height: 22px;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 4px;
+    white-space: nowrap;
+    font-size: 11px;
+}
+
+.controls .control-row input[type="range"] {
+    width: 90px;
 }
 
 .controls input {
     border: none;
-    background-color: white;
+   
 }
 
 .controls button {
     border: none;
-    margin: 3px;
-    border-radius: 5px;
-    background-color: white;
-    padding: 5px;
+    margin: 0;
+    border-radius: 4px;
+    padding: 5px 7px;
     transition: 0.8s;
+    background: #fff;
+    font-size: 11px;
 }
 
 .controls button:hover {
@@ -160,7 +213,7 @@ body {
 .conteinerMapas {
     height: 110px;
     min-height: 110px;
-    margin: 0;
+    margin: 5px;
     width: 100%;
     display: flex;
     justify-content: center;
