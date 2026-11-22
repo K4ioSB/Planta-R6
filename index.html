@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perdendo a Sanidade em Taticas do R6</title>
+    <title>Leigos | Planta R6</title>
+    <meta name="theme-color" content="#080808">
     <link rel="icon" type="image/png" href="./Operadores/High-resolution PNG/recruit_red.png">
     <link rel="stylesheet" href="css/plantas.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +14,87 @@
 </head>
 
 <body>
-    <header>
+    <main id="setup-flow" class="setup-flow">
+        <section id="map-step" class="setup-panel">
+            <div class="setup-brand">Leigos <span>PLANTA R6</span></div>
+            <div class="setup-step-heading">
+                <span>Etapa 1 de 2</span>
+                <h1>Escolha o mapa</h1>
+            </div>
+            <div class="map-selection-layout">
+                <section class="map-browser" aria-label="Mapas disponíveis">
+                    <label class="setup-field-label" for="map-search">Mapas <span id="map-count"></span></label>
+                    <input id="map-search" type="search" placeholder="Buscar mapa..." autocomplete="off">
+                    <div id="map-cards" class="map-card-grid" role="listbox" aria-label="Escolha um mapa"></div>
+                </section>
+                <section class="map-preview-panel" aria-label="Mapa selecionado">
+                    <img id="map-preview-image" alt="" hidden>
+                    <div class="map-preview-content">
+                        <h2 id="selected-map-title">Selecione um mapa</h2>
+                        <label class="setup-field-label" for="map-floor">Andar</label>
+                        <select id="map-floor" disabled>
+                            <option>Selecione um mapa primeiro</option>
+                        </select>
+                        <button id="continue-to-lineup" type="button" disabled>Continuar</button>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <section id="lineup-step" class="setup-panel lineup-panel" hidden>
+            <div id="lineup-backdrop" class="lineup-backdrop"></div>
+            <div class="lineup-content">
+                <div class="setup-step-heading">
+                    <span>Etapa 2 de 2</span>
+                    <h1>Monte seu time</h1>
+                    <p id="lineup-map-summary"></p>
+                </div>
+                <section class="side-selection" aria-labelledby="side-heading">
+                    <h2 id="side-heading">1. Escolha seu lado</h2>
+                    <div class="side-options">
+                        <button class="side-option" type="button" data-side="attack" aria-pressed="false">
+                            <span aria-hidden="true">ATQ</span> Atacar
+                        </button>
+                        <button class="side-option" type="button" data-side="defense" aria-pressed="false">
+                            <span aria-hidden="true">DEF</span> Defender
+                        </button>
+                    </div>
+                </section>
+                <section class="ban-selection" aria-labelledby="bans-heading">
+                    <h2 id="bans-heading">2. Escolha três operadores banidos</h2>
+                    <div id="ban-slots" class="ban-slots"></div>
+                    <p id="ban-status" aria-live="polite">Selecione o lado para escolher os banimentos.</p>
+                </section>
+                <section class="lineup-selection" aria-labelledby="operators-heading">
+                    <h2 id="operators-heading">3. Escolha cinco operadores</h2>
+                    <div id="operator-slots" class="operator-slots"></div>
+                    <p id="lineup-status" aria-live="polite">Selecione o lado para começar.</p>
+                </section>
+                <div class="setup-actions">
+                    <button id="back-to-map" class="secondary-button" type="button">Voltar</button>
+                    <button id="enter-editor" type="button" disabled>Abrir mapa para desenhar</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="operator-picker" class="operator-picker" hidden>
+        <div class="operator-picker-backdrop" data-close-picker></div>
+        <section class="operator-picker-dialog" role="dialog" aria-modal="true" aria-labelledby="operator-picker-title">
+            <header class="operator-picker-heading">
+                <div>
+                    <span id="operator-picker-description">Escolha um operador para a posição</span>
+                    <h2 id="operator-picker-title">Operadores</h2>
+                </div>
+                <button id="close-operator-picker" type="button" aria-label="Fechar">×</button>
+            </header>
+            <input id="operator-search" type="search" placeholder="Buscar operador..." autocomplete="off">
+            <div id="operator-options" class="operator-options"></div>
+        </section>
+    </div>
+
+    <header hidden>
         <nav class="barra">
             <div class="icons">
                 <div class="def">
@@ -120,6 +201,7 @@
                     </div>
                     <div class="controls-block controls-actions">
                         <button id="erase" style="display: none;">Borracha</button>
+                        <button id="draw-mode" type="button" aria-pressed="false">Desenhar</button>
                         <button id="undo">Retroceder</button>
                         <button id="clear">Limpar</button>
                         <button id="download">Baixar imagem</button>
@@ -265,145 +347,222 @@
             </div>
         </nav>
     </header>
-<section class="plantas">
+<section class="plantas" hidden>
     <div class="conteinerMapas">
         <span class="opcoesMapas">
             <ul class="mapas">
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-bank.png" alt=""><strong class="nomeMapa">Banco</strong>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-bank.png" alt="Banco"><strong class="nomeMapa">Banco</strong>
                     <ul class="andares">
-                        <li><button onclick="changeBackground('Mapas/BancoPorao.jpg')">Porão</button></li>
-                        <li><button onclick="changeBackground('Mapas/BancoTerreo.jpg')">Térreo</button></li>
-                        <li><button onclick="changeBackground('Mapas/BancoPrimeiro.jpg')">1º Andar</button></li>
-                        <li><button onclick="changeBackground('Mapas/BancoTelhado.jpg')">Telhado</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-bank-blueprints/r6-maps-bank-blueprint-1.jpg', 'Banco - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-bank-blueprints/r6-maps-bank-blueprint-2.jpg', 'Banco - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-bank-blueprints/r6-maps-bank-blueprint-3.jpg', 'Banco - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-bank-blueprints/r6-maps-bank-blueprint-4.jpg', 'Banco - Telhado')">Telhado</button></li>
                     </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-border.jpg" alt=""><strong class="nomeMapa">Fronteira</strong>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-border.jpg" alt="Fronteira"><strong class="nomeMapa">Fronteira</strong>
                     <ul class="andares">
-                        <li><button onclick="changeBackground('Mapas/FronteiraTerreo.jpg')">Térreo</button></li>
-                        <li><button onclick="changeBackground('Mapas/FronteiraPrimeiro.jpg')">1º Andar</button></li>
-                        <li><button onclick="changeBackground('Mapas/FronteiraTelhado.jpg')">Telhado</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-border-blueprints/r6-maps-border-blueprint-1.jpg', 'Fronteira - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-border-blueprints/r6-maps-border-blueprint-2.jpg', 'Fronteira - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-border-blueprints/r6-maps-border-blueprint-3.jpg', 'Fronteira - Telhado')">Telhado</button></li>
                     </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-chalet.png" alt=""><strong class="nomeMapa">Chalé</strong>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Mapas/r6-maps-calypso-casino-blueprints/R6S_Maps_CalypsoCasino_1F.png" alt="Cassino Calypso"><strong class="nomeMapa">Cassino Calypso</strong>
                     <ul class="andares">
-                        <li><button onclick="changeBackground('Mapas/ChalePorao.jpg')">Porão</button></li>
-                        <li><button onclick="changeBackground('Mapas/ChaleTerreo.jpg')">Térreo</button></li>
-                        <li><button onclick="changeBackground('Mapas/ChalePrimeiro.jpg')">1º Andar</button></li>
-                        <li><button onclick="changeBackground('Mapas/ChaleTelhado.jpg')">Telhado</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-calypso-casino-blueprints/R6S_Maps_CalypsoCasino_Basement.png', 'Cassino Calypso - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-calypso-casino-blueprints/R6S_Maps_CalypsoCasino_1F.png', 'Cassino Calypso - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-calypso-casino-blueprints/R6S_Maps_CalypsoCasino_2F.png', 'Cassino Calypso - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-calypso-casino-blueprints/R6S_Maps_CalypsoCasino_Roof.png', 'Cassino Calypso - Telhado')">Telhado</button></li>
                     </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-clubhouse.jpg" alt=""><strong class="nomeMapa">Clube</strong>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-chalet.png" alt="Chalé"><strong class="nomeMapa">Chalé</strong>
                     <ul class="andares">
-                        <li><button onclick="changeBackground('Mapas/ClubPorao.jpg')">Porão</button></li>
-                        <li><button onclick="changeBackground('Mapas/ClubTerreo.jpg')">Térreo</button></li>
-                        <li><button onclick="changeBackground('Mapas/ClubPrimeiro.jpg')">1º Andar</button></li>
-                        <li><button onclick="changeBackground('Mapas/ClubTelhado.jpg')">Telhado</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-chalet-blueprints/r6-maps-chalet-blueprint-1.jpg', 'Chalé - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-chalet-blueprints/r6-maps-chalet-blueprint-2.jpg', 'Chalé - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-chalet-blueprints/r6-maps-chalet-blueprint-3.jpg', 'Chalé - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-chalet-blueprints/r6-maps-chalet-blueprint-4.jpg', 'Chalé - Telhado')">Telhado</button></li>
                     </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-coastline.jpg" alt=""><strong class="nomeMapa">Litoral</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/LitoralTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/LitoralPrimeiro.jpg')">1º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/LitoralTelhado.jpg')">Telhado</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-clubhouse.jpg" alt="Clube"><strong class="nomeMapa">Clube</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-clubhouse-blueprints/r6-maps-clubhouse-blueprint-1.jpg', 'Clube - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-clubhouse-blueprints/r6-maps-clubhouse-blueprint-2.jpg', 'Clube - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-clubhouse-blueprints/r6-maps-clubhouse-blueprint-3.jpg', 'Clube - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-clubhouse-blueprints/r6-maps-clubhouse-blueprint-4.jpg', 'Clube - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-consulate.jpg" alt=""><strong class="nomeMapa">Consulado</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/ConsuladoPorao.jpg')">Porão</button></li>
-                    <li><button onclick="changeBackground('Mapas/ConsuladoTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/ConsuladoPrimeiro.jpg')">1º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/ConsuladoTelhado.jpg')">Telhado</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-coastline.jpg" alt="Litoral"><strong class="nomeMapa">Litoral</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-coastline-blueprints/r6-maps-coastline-blueprint-1.jpg', 'Litoral - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-coastline-blueprints/r6-maps-coastline-blueprint-2.jpg', 'Litoral - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-coastline-blueprints/r6-maps-coastline-blueprint-3.jpg', 'Litoral - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-kafe.jpg" alt=""><strong class="nomeMapa">Café Dostoyevsky</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/CafeTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/CafePrimeiro.jpg')">1º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/CafeSegundo.jpg')">2º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/CafeTelhado.jpg')">Telhado</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-consulate.jpg" alt="Consulado"><strong class="nomeMapa">Consulado</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-consulate-blueprints_may23/r6-maps-consulat-blueprints_may23/r6-maps-consulate-blueprint-1.jpg', 'Consulado - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-consulate-blueprints_may23/r6-maps-consulat-blueprints_may23/r6-maps-consulate-blueprint-2.jpg', 'Consulado - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-consulate-blueprints_may23/r6-maps-consulat-blueprints_may23/r6-maps-consulate-blueprint-3.jpg', 'Consulado - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-consulate-blueprints_may23/r6-maps-consulat-blueprints_may23/r6-maps-consulate-blueprint-4.jpg', 'Consulado - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-kanal.jpg" alt=""><strong class="nomeMapa">Canal</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/CanalPorao.jpg')">Porão</button></li>
-                    <li><button onclick="changeBackground('Mapas/CanalTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/CanalPrimeiro.jpg')">1º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/CanalTelhado.jpg')">Telhado</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6s-maps-emeraldplains.jpg" alt="Planícies Esmeralda"><strong class="nomeMapa">Planícies Esmeralda</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-emeraldplains-blueprints/r6-maps-emeraldplains-blueprint-1.jpg', 'Planícies Esmeralda - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-emeraldplains-blueprints/r6-maps-emeraldplains-blueprint-2.jpg', 'Planícies Esmeralda - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-emeraldplains-blueprints/r6-maps-emeraldplains-blueprint-3.jpg', 'Planícies Esmeralda - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
             </ul>
             <ul class="mapas">
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-oregon.jpg" alt=""><strong class="nomeMapa">Oregon</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/OregonPorao.jpg')">Porão</button></li>
-                    <li><button onclick="changeBackground('Mapas/OregonTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/OregonPrimeiro.jpg')">1º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/OregonTelhado.jpg')">Telhado</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Mapas/r6-maps-favela-blueprints/r6-maps-favela-blueprints/r6-maps-favela-blueprint-1.jpg" alt="Favela"><strong class="nomeMapa">Favela</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-favela-blueprints/r6-maps-favela-blueprints/r6-maps-favela-blueprint-1.jpg', 'Favela - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-favela-blueprints/r6-maps-favela-blueprints/r6-maps-favela-blueprint-2.jpg', 'Favela - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-favela-blueprints/r6-maps-favela-blueprints/r6-maps-favela-blueprint-3.jpg', 'Favela - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-favela-blueprints/r6-maps-favela-blueprints/r6-maps-favela-blueprint-4.jpg', 'Favela - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-favela-blueprints/r6-maps-favela-blueprints/r6-maps-favela-blueprint-5.jpg', 'Favela - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-outback.jpg" alt=""><strong class="nomeMapa">Outback</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/OutbackTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/OutbackPrimeiro.jpg')">1º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/OutbackTelhado.jpg')">Telhado</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Mapas/r6-maps-fortress-blueprints/r6-maps-fortress-blueprint-1.jpg" alt="Fortaleza"><strong class="nomeMapa">Fortaleza</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-fortress-blueprints/r6-maps-fortress-blueprint-1.jpg', 'Fortaleza - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-fortress-blueprints/r6-maps-fortress-blueprint-2.jpg', 'Fortaleza - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-fortress-blueprints/r6-maps-fortress-blueprint-3.jpg', 'Fortaleza - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-skyscraper.jpg" alt=""><strong class="nomeMapa">Arranha Céu</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/ArranhaTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/ArranhaPrimeiro.jpg')">1º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/ArranhaTelhado1.jpg')">Telhado 1</button></li>
-                    <li><button onclick="changeBackground('Mapas/ArranhaTelhado2.jpg')">Telhado 2</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Mapas/r6-maps-hereford-blueprints/r6-maps-hereford-blueprint-1.jpg" alt="Base Hereford"><strong class="nomeMapa">Base Hereford</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-hereford-blueprints/r6-maps-hereford-blueprint-1.jpg', 'Base Hereford - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-hereford-blueprints/r6-maps-hereford-blueprint-2.jpg', 'Base Hereford - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-hereford-blueprints/r6-maps-hereford-blueprint-3.jpg', 'Base Hereford - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-hereford-blueprints/r6-maps-hereford-blueprint-4.jpg', 'Base Hereford - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-hereford-blueprints/r6-maps-hereford-blueprint-5.jpg', 'Base Hereford - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-themepark.jpg" alt=""><strong class="nomeMapa">Parque Traumático</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/ParqueTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/ParquePrimeiro.jpg')">1º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/ParqueTelhado1.jpg')">Telhado 1</button></li>
-                    <li><button onclick="changeBackground('Mapas/ParqueTelhado2.jpg')">Telhado 2</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Mapas/r6-maps-house-blueprints/r6-maps-house-blueprint-1.jpg" alt="Casa"><strong class="nomeMapa">Casa</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-house-blueprints/r6-maps-house-blueprint-1.jpg', 'Casa - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-house-blueprints/r6-maps-house-blueprint-2.jpg', 'Casa - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-house-blueprints/r6-maps-house-blueprint-3.jpg', 'Casa - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-house-blueprints/r6-maps-house-blueprint-4.jpg', 'Casa - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-villa.jpg" alt=""><strong class="nomeMapa">Mansão</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/MansaoPorao.jpg')">Porão</button></li>
-                    <li><button onclick="changeBackground('Mapas/MansaoTerreo1.jpg')">Térreo 1</button></li>
-                    <li><button onclick="changeBackground('Mapas/MansaoTerreo2.jpg')">Térreo 2</button></li>
-                    <li><button onclick="changeBackground('Mapas/MansaoPrimeiro1.jpg')">1º Andar 1</button></li>
-                    <li><button onclick="changeBackground('Mapas/MansaoPrimeiro2.jpg')">1º Andar 2</button></li>
-                    <li><button onclick="changeBackground('Mapas/MansaoTelhado.jpg')">Telhado</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-kafe.jpg" alt="Café Dostoyevsky"><strong class="nomeMapa">Café Dostoyevsky</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-kafe-blueprints/r6-maps-kafe-blueprint-1.jpg', 'Café Dostoyevsky - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-kafe-blueprints/r6-maps-kafe-blueprint-2.jpg', 'Café Dostoyevsky - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-kafe-blueprints/r6-maps-kafe-blueprint-3.jpg', 'Café Dostoyevsky - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-kafe-blueprints/r6-maps-kafe-blueprint-4.jpg', 'Café Dostoyevsky - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6s-maps-lair.jpg" alt=""><strong class="nomeMapa">Covil</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/CovilPorao.jpg')">Porão</button></li>
-                    <li><button onclick="changeBackground('Mapas/CovilTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/CovilPrimeiro.jpg')">1º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/CovilTelhado.jpg')">Telhado</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-kanal.jpg" alt="Canal"><strong class="nomeMapa">Canal</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-kanal-blueprints/r6-maps-kanal-blueprints/r6-maps-kanal-blueprint-1.jpg', 'Canal - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-kanal-blueprints/r6-maps-kanal-blueprints/r6-maps-kanal-blueprint-2.jpg', 'Canal - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-kanal-blueprints/r6-maps-kanal-blueprints/r6-maps-kanal-blueprint-3.jpg', 'Canal - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-kanal-blueprints/r6-maps-kanal-blueprints/r6-maps-kanal-blueprint-4.jpg', 'Canal - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-kanal-blueprints/r6-maps-kanal-blueprints/r6-maps-kanal-blueprint-5.jpg', 'Canal - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6-maps-labs-nighthaven.jpg" alt=""><strong class="nomeMapa">Laboratórios Nighthaven</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/LabPorao.jpg')">Porão</button></li>
-                    <li><button onclick="changeBackground('Mapas/LabTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/LabPrimeiro.jpg')">1º Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/LabTelhado1.jpg')">Telhado 1</button></li>
-                    <li><button onclick="changeBackground('Mapas/LabTelhado2.jpg')">Telhado 2</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6s-maps-lair.jpg" alt="Covil"><strong class="nomeMapa">Covil</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-lair-blueprints/r6-maps-lair-blueprints/r6-maps-lair-blueprint-1.jpg', 'Covil - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-lair-blueprints/r6-maps-lair-blueprints/r6-maps-lair-blueprint-2.jpg', 'Covil - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-lair-blueprints/r6-maps-lair-blueprints/r6-maps-lair-blueprint-3.jpg', 'Covil - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-lair-blueprints/r6-maps-lair-blueprints/r6-maps-lair-blueprint-4.jpg', 'Covil - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
-                <li tabindex="0" class="mapa"><img class="mapaOpcao" src="Fundo/r6s-maps-emeraldplains.jpg" alt=""><strong class="nomeMapa">Planíce Esmeralda</strong>
-                <ul class="andares">
-                    <li><button onclick="changeBackground('Mapas/EsmeraldaTerreo.jpg')">Térreo</button></li>
-                    <li><button onclick="changeBackground('Mapas/EsmeraldaPrimeiro.jpg')">1º  Andar</button></li>
-                    <li><button onclick="changeBackground('Mapas/EsmeraldaTelhado1.jpg')">Telhado 1</button></li>
-                    <li><button onclick="changeBackground('Mapas/EsmeraldaTelhado2.jpg')">Telhado 2</button></li>
-                </ul>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-labs-nighthaven.jpg" alt="Laboratórios Nighthaven"><strong class="nomeMapa">Laboratórios Nighthaven</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-nighthavenlabs-blueprints/r6-maps-nighthavenlabs-blueprint-1.jpg', 'Laboratórios Nighthaven - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-nighthavenlabs-blueprints/r6-maps-nighthavenlabs-blueprint-2.jpg', 'Laboratórios Nighthaven - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-nighthavenlabs-blueprints/r6-maps-nighthavenlabs-blueprint-3.jpg', 'Laboratórios Nighthaven - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-nighthavenlabs-blueprints/r6-maps-nighthavenlabs-blueprint-4.jpg', 'Laboratórios Nighthaven - Telhado')">Telhado</button></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="mapas">
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-oregon.jpg" alt="Oregon"><strong class="nomeMapa">Oregon</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-oregon-blueprints/r6-maps-oregon-blueprint-1.jpg', 'Oregon - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-oregon-blueprints/r6-maps-oregon-blueprint-2.jpg', 'Oregon - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-oregon-blueprints/r6-maps-oregon-blueprint-3.jpg', 'Oregon - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-oregon-blueprints/r6-maps-oregon-blueprint-4.jpg', 'Oregon - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-oregon-blueprints/r6-maps-oregon-blueprint-5.jpg', 'Oregon - Telhado')">Telhado</button></li>
+                    </ul>
+                </li>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-outback.jpg" alt="Outback"><strong class="nomeMapa">Outback</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-outback-blueprints/r6-maps-outback-blueprint-1.jpg', 'Outback - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-outback-blueprints/r6-maps-outback-blueprint-2.jpg', 'Outback - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-outback-blueprints/r6-maps-outback-blueprint-3.jpg', 'Outback - Telhado')">Telhado</button></li>
+                    </ul>
+                </li>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Mapas/r6-maps-plane-blueprints/r6-maps-plane-blueprint-1.jpg" alt="Avião"><strong class="nomeMapa">Avião</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-plane-blueprints/r6-maps-plane-blueprint-1.jpg', 'Avião - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-plane-blueprints/r6-maps-plane-blueprint-2.jpg', 'Avião - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-plane-blueprints/r6-maps-plane-blueprint-3.jpg', 'Avião - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-plane-blueprints/r6-maps-plane-blueprint-4.jpg', 'Avião - Telhado')">Telhado</button></li>
+                    </ul>
+                </li>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-skyscraper.jpg" alt="Arranha-céu"><strong class="nomeMapa">Arranha-céu</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-skyscraper-blueprints/r6-maps-skyscraper-blueprint-1.jpg', 'Arranha-céu - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-skyscraper-blueprints/r6-maps-skyscraper-blueprint-2.jpg', 'Arranha-céu - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-skyscraper-blueprints/r6-maps-skyscraper-blueprint-3.jpg', 'Arranha-céu - Telhado')">Telhado</button></li>
+                    </ul>
+                </li>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-themepark.jpg" alt="Parque Temático"><strong class="nomeMapa">Parque Temático</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-themepark-blueprints/r6-maps-themepark-blueprints/r6-maps-themepark-blueprint-1.jpg', 'Parque Temático - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-themepark-blueprints/r6-maps-themepark-blueprints/r6-maps-themepark-blueprint-2.jpg', 'Parque Temático - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-themepark-blueprints/r6-maps-themepark-blueprints/r6-maps-themepark-blueprint-3.jpg', 'Parque Temático - Telhado')">Telhado</button></li>
+                    </ul>
+                </li>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Mapas/r6-maps-tower-blueprints/r6-maps-tower-blueprint-1.jpg" alt="Torre"><strong class="nomeMapa">Torre</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-tower-blueprints/r6-maps-tower-blueprint-1.jpg', 'Torre - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-tower-blueprints/r6-maps-tower-blueprint-2.jpg', 'Torre - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-tower-blueprints/r6-maps-tower-blueprint-3.jpg', 'Torre - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-tower-blueprints/r6-maps-tower-blueprint-4.jpg', 'Torre - Telhado')">Telhado</button></li>
+                    </ul>
+                </li>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Fundo/r6-maps-villa.jpg" alt="Mansão"><strong class="nomeMapa">Mansão</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-villa-blueprints/r6-maps-villa-blueprint-1.jpg', 'Mansão - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-villa-blueprints/r6-maps-villa-blueprint-2.jpg', 'Mansão - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-villa-blueprints/r6-maps-villa-blueprint-3.jpg', 'Mansão - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-villa-blueprints/r6-maps-villa-blueprint-4.jpg', 'Mansão - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-villa-blueprints/r6-maps-villa-blueprint-5.jpg', 'Mansão - Telhado')">Telhado</button></li>
+                    </ul>
+                </li>
+                <li tabindex="0" class="mapa"><img class="mapaOpcao" loading="lazy" src="Mapas/r6-maps-yacht-blueprints/r6-maps-yacht-blueprint-1.jpg" alt="Iate"><strong class="nomeMapa">Iate</strong>
+                    <ul class="andares">
+                        <li><button onclick="changeBackground('Mapas/r6-maps-yacht-blueprints/r6-maps-yacht-blueprint-1.jpg', 'Iate - Porão')">Porão</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-yacht-blueprints/r6-maps-yacht-blueprint-2.jpg', 'Iate - Térreo')">Térreo</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-yacht-blueprints/r6-maps-yacht-blueprint-3.jpg', 'Iate - 1º Andar')">1º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-yacht-blueprints/r6-maps-yacht-blueprint-4.jpg', 'Iate - 2º Andar')">2º Andar</button></li>
+                        <li><button onclick="changeBackground('Mapas/r6-maps-yacht-blueprints/r6-maps-yacht-blueprint-5.jpg', 'Iate - Telhado')">Telhado</button></li>
+                    </ul>
                 </li>
             </ul>
         </span>
     </div>
    
-    <canvas id="canvas" width="1600" height="900"></canvas>
+    <div class="canvas-viewport">
+        <canvas id="canvas" width="1600" height="900"></canvas>
+        <span class="zoom-indicator" id="zoom-indicator">Zoom: 100%</span>
+        <div id="editor-map-controls" class="editor-map-controls" hidden>
+            <label class="visually-hidden" for="editor-floor-select">Andar do mapa</label>
+            <select id="editor-floor-select" aria-label="Andar do mapa"></select>
+            <button id="toggle-editor-map-menu" type="button" aria-expanded="false">Mapa</button>
+            <button id="center-canvas" type="button">Centralizar</button>
+        </div>
+        <div id="editor-map-menu" class="editor-map-menu" hidden></div>
+        <div id="editor-ban-list" class="editor-ban-list" aria-label="Operadores banidos" hidden></div>
+    </div>
+    <div id="player-panels" class="player-panels" hidden></div>
 
     <footer style="display: none;">
         <div style="padding: 10px;">
@@ -413,6 +572,7 @@
 </section>
     <script src="desenho.js"></script>
     <script src="icones.js"></script>
+    <script src="setup.js"></script>
 </body>
 
 </html>

@@ -6,11 +6,22 @@ var eraseButton = document.getElementById('erase');
 var undoButton = document.getElementById('undo');
 var clearButton = document.getElementById('clear');
 var downloadButton = document.getElementById('download');
+var drawModeButton = document.getElementById('draw-mode');
+var canvasViewport = document.querySelector('.canvas-viewport');
+var zoomIndicator = document.getElementById('zoom-indicator');
 
 var isDrawing = false;
+var isPanning = false;
+var isDrawMode = false;
 var lastX = 0;
 var lastY = 0;
-var drawSnapshotSaved = false;
+var panStartX = 0;
+var panStartY = 0;
+var panStartOffsetX = 0;
+var panStartOffsetY = 0;
+var zoomScale = 1;
+var panX = 0;
+var panY = 0;
 var undoStack = [];
 var currentBackground = './Fundo/download.jpg';
 var selectedMapName = 'Planta R6';
@@ -65,6 +76,61 @@ function getCanvasPoint(event) {
     ];
 }
 
+function updateCanvasTransform() {
+    canvas.style.transform = 'translate(' + panX + 'px, ' + panY + 'px) scale(' + zoomScale + ')';
+}
+
+function centerCanvasView() {
+    panX = 0;
+    panY = 0;
+    zoomScale = 1;
+    updateCanvasTransform();
+    zoomIndicator.textContent = 'Zoom: 100%';
+}
+
+window.centerCanvasView = centerCanvasView;
+document.getElementById('center-canvas').addEventListener('click', centerCanvasView);
+
+function constrainPan() {
+    var viewportWidth = canvasViewport.clientWidth;
+    var viewportHeight = canvasViewport.clientHeight;
+    var canvasWidth = canvas.offsetWidth;
+    var canvasHeight = canvas.offsetHeight;
+    var baseX = (viewportWidth - canvasWidth) / 2;
+    var baseY = (viewportHeight - canvasHeight) / 2;
+    var minVisible = Math.min(80, viewportWidth / 2, viewportHeight / 2);
+
+    panX = Math.max(minVisible - baseX - canvasWidth * zoomScale,
+        Math.min(viewportWidth - minVisible - baseX, panX));
+    panY = Math.max(minVisible - baseY - canvasHeight * zoomScale,
+        Math.min(viewportHeight - minVisible - baseY, panY));
+}
+
+canvasViewport.addEventListener('wheel', function(e) {
+    e.preventDefault();
+
+    var previousZoom = zoomScale;
+    var nextZoom = Math.max(1, Math.min(3, zoomScale * Math.pow(1.1, -e.deltaY / 100)));
+    if (nextZoom === previousZoom) return;
+
+    var rect = canvas.getBoundingClientRect();
+    var canvasPointX = (e.clientX - rect.left) / previousZoom;
+    var canvasPointY = (e.clientY - rect.top) / previousZoom;
+    panX += (previousZoom - nextZoom) * canvasPointX;
+    panY += (previousZoom - nextZoom) * canvasPointY;
+    zoomScale = nextZoom;
+    constrainPan();
+    updateCanvasTransform();
+    zoomIndicator.textContent = 'Zoom: ' + Math.round(zoomScale * 100) + '%';
+}, { passive: false });
+
+drawModeButton.addEventListener('click', function() {
+    isDrawMode = !isDrawMode;
+    drawModeButton.setAttribute('aria-pressed', String(isDrawMode));
+    drawModeButton.textContent = isDrawMode ? 'Mover imagem' : 'Desenhar';
+    canvas.classList.toggle('drawing-mode', isDrawMode);
+});
+
 function saveCanvasSnapshot() {
     undoStack.push({
         imageData: context.getImageData(0, 0, canvas.width, canvas.height),
@@ -87,10 +153,10 @@ function redrawCurrentBackground() {
     img.src = currentBackground;
 }
 
-function changeBackground(imageUrl) {
+function changeBackground(imageUrl, mapName) {
     saveCanvasSnapshot();
     currentBackground = imageUrl;
-    selectedMapName = getMapName(imageUrl);
+    selectedMapName = mapName || getMapName(imageUrl);
     var img = new Image();
     img.onload = function() {
         context.clearRect(0, 0, canvas.width, canvas.height); 
@@ -99,14 +165,34 @@ function changeBackground(imageUrl) {
     img.src = imageUrl;
 }
 
-canvas.addEventListener('mousedown', function(e) {
-    isDrawing = true;
-    drawSnapshotSaved = true;
-    saveCanvasSnapshot();
-    [lastX, lastY] = getCanvasPoint(e);
+canvas.addEventListener('pointerdown', function(e) {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    canvas.setPointerCapture(e.pointerId);
+
+    if (isDrawMode) {
+        isDrawing = true;
+        saveCanvasSnapshot();
+        [lastX, lastY] = getCanvasPoint(e);
+        return;
+    }
+
+    isPanning = true;
+    panStartX = e.clientX;
+    panStartY = e.clientY;
+    panStartOffsetX = panX;
+    panStartOffsetY = panY;
+    canvas.classList.add('panning');
 });
 
-canvas.addEventListener('mousemove', function(e) {
+canvas.addEventListener('pointermove', function(e) {
+    if (isPanning) {
+        panX = panStartOffsetX + e.clientX - panStartX;
+        panY = panStartOffsetY + e.clientY - panStartY;
+        constrainPan();
+        updateCanvasTransform();
+        return;
+    }
     if (!isDrawing) return;
 
     context.strokeStyle = colorInput.value;
@@ -125,9 +211,14 @@ canvas.addEventListener('mousemove', function(e) {
     [lastX, lastY] = point;
 });
 
-canvas.addEventListener('mouseup', function() {
+function finishCanvasInteraction() {
     isDrawing = false;
-});
+    isPanning = false;
+    canvas.classList.remove('panning');
+}
+
+canvas.addEventListener('pointerup', finishCanvasInteraction);
+canvas.addEventListener('pointercancel', finishCanvasInteraction);
 
 eraseButton.addEventListener('click', function() {
     eraseButton.classList.toggle('active');

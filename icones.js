@@ -15,42 +15,45 @@ document.addEventListener('DOMContentLoaded', function () {
     const image = new Image();
     image.src = './Fundo/download.jpg'; 
     image.onload = function() {
-        canvas.width = this.width;
-        canvas.height = this.height;
-        ctx.drawImage(this, 0, 0);
-        imageLoaded = true;
-        if (typeof window.saveCanvasSnapshot === 'function') {
-            window.saveCanvasSnapshot();
+        if (window.currentBackground === './Fundo/download.jpg') {
+            canvas.width = this.width;
+            canvas.height = this.height;
+            ctx.drawImage(this, 0, 0);
+            if (typeof window.saveCanvasSnapshot === 'function') {
+                window.saveCanvasSnapshot();
+            }
         }
+        imageLoaded = true;
     };
 
     icons.forEach(icon => {
+        rotationAngle[icon.id] = 0;
+    });
+
+    document.addEventListener('click', function(e) {
+        const icon = e.target.closest('.icon');
+        if (!icon || !icon.closest('.gadgets')) return;
+
         const iconId = icon.id;
-        rotationAngle[iconId] = 0; 
-
-        
-        if (icon.closest('.gadgets')) {
-            icon.addEventListener('click', function () {
-               
-                rotationAngle[iconId] = (rotationAngle[iconId] + 90) % 360;
-                
-              
-                icon.querySelector('img').classList.remove('rotated-90', 'rotated-180', 'rotated-270');
-                if (rotationAngle[iconId] === 90) {
-                    icon.querySelector('img').classList.add('rotated-90');
-                } else if (rotationAngle[iconId] === 180) {
-                    icon.querySelector('img').classList.add('rotated-180');
-                } else if (rotationAngle[iconId] === 270) {
-                    icon.querySelector('img').classList.add('rotated-270');
-                }
-            });
+        rotationAngle[iconId] = ((rotationAngle[iconId] || 0) + 90) % 360;
+        const image = icon.querySelector('img');
+        image.classList.remove('rotated-90', 'rotated-180', 'rotated-270');
+        if (rotationAngle[iconId] !== 0) {
+            image.classList.add('rotated-' + rotationAngle[iconId]);
         }
+    });
 
-        icon.addEventListener('dragstart', function (e) {
-            const size = Number(iconSizeInput.value);
-            e.dataTransfer.setDragImage(this, size / 2, size / 2);
-            e.dataTransfer.setData('text/plain', JSON.stringify({ src: icon.getAttribute('data-src'), id: iconId }));
-        });
+    document.addEventListener('dragstart', function(e) {
+        const icon = e.target.closest('.icon');
+        if (!icon || !icon.hasAttribute('data-src')) return;
+
+        const size = Number(iconSizeInput.value);
+        e.dataTransfer.setDragImage(icon, size / 2, size / 2);
+        e.dataTransfer.setData('text/plain', JSON.stringify({
+            src: icon.getAttribute('data-src'),
+            id: icon.id,
+            playerName: icon.getAttribute('data-player-name') || ''
+        }));
     });
 
     canvas.addEventListener('dragover', function (e) {
@@ -74,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = JSON.parse(e.dataTransfer.getData('text/plain'));
         const iconSrc = data.src;
         const iconId = data.id;
+        const playerName = (data.playerName || '').trim();
         const iconRotation = rotationAngle[iconId] || 0; 
 
         const iconImg = new Image();
@@ -88,6 +92,19 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             ctx.drawImage(iconImg, -(size / 2), -(size / 2), size, size);
+            if (playerName) {
+                const fontSize = Math.max(12, Math.round(size * 0.32));
+                const labelY = -(size / 2) - 5;
+                ctx.font = `bold ${fontSize}px Arial, sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+                ctx.lineJoin = 'round';
+                ctx.lineWidth = Math.max(2, fontSize * 0.18);
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.9)';
+                ctx.fillStyle = '#fff';
+                ctx.strokeText(playerName, 0, labelY, size * 3);
+                ctx.fillText(playerName, 0, labelY, size * 3);
+            }
             ctx.restore();
         };
     });
